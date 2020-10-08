@@ -1,0 +1,74 @@
+
+
+#spring.profiles.active=dev
+
+################### DataSource Configuration ##########################
+logging:
+  file:
+    path: /opt/app/logs/authentication-service
+    name: authentication-service.log
+  file.max-size: 10MB
+  level:
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    com.gdl.etax.authentication: DEBUG
+    spring.jpa: DEBUG
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl: ERROR
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} - %msg%n'
+security:
+  oauth2:
+    resource:
+      filter-order: 3
+check-user-scopes: false
+
+server:
+  servlet:
+    context-path: /auth
+  port: 9000
+
+service.url:
+  #  access-db: 192.168.36.208:1521
+  access-db: 127.0.0.1:1521
+
+spring:
+  profiles.active: auth_test
+  main:
+    banner-mode: "OFF"
+    allow-bean-definition-overriding: true
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@${service.url.access-db}/xe
+    username: MINI_PROJECT
+    password: '1234'
+    hikari:
+      auto-commit: false
+      idle-timeout: 10000
+      minimum-idle: 1
+      maximum-pool-size: 20
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+      pool-name: etaxReportServiceDatasource
+
+    jpa:
+      show-sql: true
+      properties:
+        hibernate.dialect: org.hibernate.dialect.Oracle10gDialect
+        hibernate.connection.provider_disables_autocommit: true
+        hibernate.cache.use_query_cache: false
+        hibernate.generate_statistics: false
+        hibernate.current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        hibernate.enable_lazy_load_no_trans: true
+        hibernate.ddl-auto: update
+        hibernate.default_schema: nfsrgt
+        hibernate.connection.autocommit: false
+
